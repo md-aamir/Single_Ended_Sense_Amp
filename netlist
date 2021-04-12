@@ -1,0 +1,128 @@
+************************************************************************
+* auCdl Netlist:
+* 
+* Library Name:  MDT_ENDSEM
+* Top Cell Name: Strong_Arm_fixed_Reference
+* View Name:     schematic
+* Netlisted on:  May  5 17:15:17 2020
+************************************************************************
+
+*.BIPOLAR
+*.RESI = 2000 
+*.RESVAL
+*.CAPVAL
+*.DIOPERI
+*.DIOAREA
+*.EQUATION
+*.SCALE METER
+*.MEGA
+.PARAM
+
+
+
+************************************************************************
+* Library Name: MDT_ENDSEM
+* Cell Name:    Vref_fix
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT Vref_fix Pre_CH Vdd gnd out
+*.PININFO Pre_CH:I Vdd:I gnd:I out:O
+XM1 out Pre_CH net08 net08 nlvtlp w=0.135 l=0.06 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+XM2 gnd net08 gnd gnd nlvtlp w=0.135 l=0.06 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+XM0 out Pre_CH Vdd Vdd plvtlp w=0.135 l=0.06 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+XM4 gnd Pre_CH net08 net08 plvtlp w=0.135 l=0.06 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+CC7 out gnd 5f 
+.ENDS
+
+
+************************************************************************
+* Library Name: BitCell
+* Cell Name:    NOT2
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT NOT2 Vdd Vin Vout gnd
+*.PININFO Vdd:I Vin:I gnd:I Vout:O
+XM7 Vout Vin gnd gnd nlvtlp w=0.135 l=0.06 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+XM6 Vout Vin Vdd Vdd plvtlp w=0.27 l=0.06 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+.ENDS
+
+************************************************************************
+* Library Name: BitCell
+* Cell Name:    NOT
+* View Name:    schematic
+************************************************************************
+*High width to control reult1
+.SUBCKT NOT Vdd Vin Vout gnd
+*.PININFO Vdd:I Vin:I gnd:I Vout:O
+XM7 Vout Vin gnd gnd nlvtlp w=0.27 l=0.06 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+XM6 Vout Vin Vdd Vdd plvtlp w=0.54 l=0.06 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+.ENDS
+************************************************************************
+* Library Name: MDT_ENDSEM
+* Cell Name:    LATCH_SA
+* View Name:    schematic
+************************************************************************
+*High width to control reult0
+.SUBCKT LATCH_SA Out OutB Result SAen Vdd gnd
+*.PININFO Out:I OutB:I SAen:I Vdd:I gnd:I Result:O
+XM14 net05 net039 gnd gnd nlvtlp w=0.135 l=0.06 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+XM15 net05 OutB Vdd Vdd plvtlp w=0.135 l=0.06 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+XI7 Vdd net05 Result gnd NOT2
+XI3 Vdd Out net039 gnd NOT
+XI5 net038 Result net05 SAen NOT2
+XI6 Vdd SAen net038 gnd NOT2
+.ENDS
+
+************************************************************************
+* Library Name: MDT_ENDSEM
+* Cell Name:    Strong_Arm_fixed_Reference
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT Strong_Arm_fixed_Reference BL Out OutB PreCH Result SAen Vdd Vref gnd
+*.PININFO BL:I PreCH:I SAen:I Vdd:I gnd:I Out:O OutB:O Result:O Vref:O
+
+XM10 net20 BL net018 net018 nlvtlp w=0.81 l=0.09 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+
+************************************************************************
+*Footer
+XM6 net018 SAen gnd gnd nlvtlp w=0.81 l=0.09 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+************************************************************************
+
+XM3 OutB Out net20 net20 nlvtlp w=0.81 l=0.09 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+XM11 net024 Vref net018 net018 nlvtlp w=0.81 l=0.09 nfing=1 sense=0 ngcon=1 	
++ m=1 accurateFlow=0
+XM0 Out OutB net024 net024 nlvtlp w=0.81 l=0.09 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+***********************************************************************
+XM9 Vdd PreCH Out Out plvtlp w=0.81 l=0.09 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+XM8 Vdd PreCH OutB OutB plvtlp w=0.81 l=0.09 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+XM7 OutB PreCH Out Out plvtlp w=0.81 l=0.09 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+
+***********************************************************************
+XM5 OutB Out Vdd Vdd plvtlp w=0.81 l=0.09 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+XM4 Out OutB Vdd Vdd plvtlp w=0.81 l=0.09 nfing=1 sense=0 ngcon=1 m=1 
++ accurateFlow=0
+XI11 PreCH Vdd gnd Vref Vref_fix
+XI12 Out OutB Result SAen Vdd gnd LATCH_SA
+.ENDS
+

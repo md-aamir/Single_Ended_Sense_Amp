@@ -1,0 +1,42 @@
+*for typical nmos and typical pmos
+
+.LIB /modelfile_65nm/typNtypP.cir
+
+
+*.include 'Strong_Arm_SA2'
+.include 'netlist'
+.ic v(Result)=1.2	
+
+XStrong BL Out OutB PreCH Result SAen Vdd Vref gnd Strong_Arm_fixed_Reference
+
+*gnd connection
+.connect gnd 0
+*vdd supply
+v0 Vdd gnd dc 1.2
+
+
+*vVref Vref gnd dc 0.8
+*vbl BL gnd dc 1.2	
+*.step v0 LIST 1.2 1.08 1.32
+
+vp PreCH gnd pattern	(1.2 0 0n   0.1n 0.1n 1n   01   r=-1)
+v1 SAen  gnd pattern    (1.2 0 0.8n 0.1n 0.1n 0.5n 0100 r=-1)
+vc check gnd pattern    (1.2 0 0n   0.1n 0.1n 41n  01   r=-1)
+
+.DEFWAVE offset=ABS(v(BL)-v(Vref))
+vPWL BL gnd PWL file="sample/sample.txt"
+.tran 0.1n 61n
+.plot tran 
++ w(offset) 
++ v(PreCH) v(Out) v(OutB) v(SAen) v(Result) v(Vref) v(BL) v(check)
+*Vref 0.9-0.75
+
+*EXTRACTION
+
+.EXTRACT LABEL=Offset_val3 FILE = Offset_Analysis3  XYCOND(w(Offset), ((v(Result)<0.3) && (v(check)<0.3)),START,END)
+.EXTRACT LABEL=Offset_val2 FILE = Offset_Analysis2  XYCOND(w(Offset), ((v(Result)>1.0) && (v(check)>1.0)),START,END)
+
+.EXTRACT LABEL=Offset_val1 FILE = Offset_Analysis1  XYCOND(w(Offset), ((v(OutB)<0.40)),START,END)
+
+
+.MC 100 DATAFLOW=0 ALL

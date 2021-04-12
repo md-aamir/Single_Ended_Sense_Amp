@@ -1,0 +1,10 @@
+source /mentor/ams_cshrc
+rm Strong_Arm2.ch*
+rm Strong_Arm2.w*
+rm Strong_Arm2.s*
+rm Strong_Arm2.i*
+rm Offse*
+rm test
+rm *~
+eldo Strong_Arm2.cir>>test
+ezwave Strong_Arm2.wdb
